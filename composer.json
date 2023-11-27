@@ -2,8 +2,8 @@
     "name": "jamiemonksuk/php-gpt-funcs",
     "version": "0.1",
     "autoload": {
-        "psr-0": {
-            "AmblePhpGptFuncs": "src/"
+        "psr-4": {
+            "AmblePhpGptFuncs\\": "src/"
         }
     }
 }
