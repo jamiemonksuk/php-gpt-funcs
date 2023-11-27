@@ -1,6 +1,6 @@
 <?php
 
-use Amble\PhpGptFuncs\library\ChatGPT;
+use AmblePhpGptFuncs\library\ChatGPT;
 
 
 class MyGPTClass {

@@ -2,7 +2,7 @@
 
 // get api key
 
-use Amble\PhpGptFuncs\library\ChatGPT;
+use AmblePhpGptFuncs\library\ChatGPT;
 
 $api_key = getenv( "OPENAI_API_KEY" );
 

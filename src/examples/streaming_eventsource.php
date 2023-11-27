@@ -1,7 +1,7 @@
 <?php
 
-use Amble\PhpGptFuncs\library\ChatGPT;
-use Amble\PhpGptFuncs\library\StreamType;
+use AmblePhpGptFuncs\library\ChatGPT;
+use AmblePhpGptFuncs\library\StreamType;
 
 
 if( isset( $_GET['stream'] ) ) {

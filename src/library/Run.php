@@ -1,5 +1,5 @@
 <?php
-namespace Amble\PhpGptFuncs\library;
+namespace AmblePhpGptFuncs\library;
 
 class Run
 {
