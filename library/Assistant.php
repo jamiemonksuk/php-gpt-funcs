@@ -1,4 +1,6 @@
 <?php
+namespace Amble\PhpGptFuncs\library;
+
 class Assistant
 {
     public function __construct(

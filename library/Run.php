@@ -1,4 +1,6 @@
 <?php
+namespace Amble\PhpGptFuncs\library;
+
 class Run
 {
     public function __construct(

@@ -1,5 +1,8 @@
 <?php
-require( __DIR__ . "/../library/ChatGPT.php" );
+
+use Amble\PhpGptFuncs\library\ChatGPT;
+use Amble\PhpGptFuncs\library\StreamType;
+
 
 if( isset( $_GET['stream'] ) ) {
     header( "Content-Type: text/event-stream" );

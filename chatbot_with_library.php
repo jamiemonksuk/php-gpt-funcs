@@ -1,8 +1,9 @@
 <?php
-// include library
-require_once( "library/ChatGPT.php" );
 
 // get api key
+
+use Amble\PhpGptFuncs\library\ChatGPT;
+
 $api_key = getenv( "OPENAI_API_KEY" );
 
 // global cart array

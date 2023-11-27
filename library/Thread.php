@@ -1,4 +1,6 @@
 <?php
+namespace Amble\PhpGptFuncs\library;
+
 class Thread
 {
     public function __construct(

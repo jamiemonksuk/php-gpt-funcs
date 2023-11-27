@@ -1,5 +1,6 @@
 <?php
-require("../library/ChatGPT.php");
+
+use Amble\PhpGptFuncs\library\ChatGPT;
 
 $chat_id = "test_chat_id"; // set to null for automatic ID
 

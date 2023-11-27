@@ -1,9 +1,7 @@
 <?php
 // include library
-require_once( "library/ChatGPT.php" );
-require_once( "library/Assistant.php" );
-require_once( "library/Thread.php" );
-require_once( "library/Run.php" );
+
+use Amble\PhpGptFuncs\library\ChatGPT;
 
 // get api key
 $api_key = getenv( "OPENAI_API_KEY" );

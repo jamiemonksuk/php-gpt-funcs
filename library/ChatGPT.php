@@ -1,4 +1,12 @@
 <?php
+namespace Amble\PhpGptFuncs\library;
+
+use CurlHandle;
+use Exception;
+use ReflectionFunction;
+use ReflectionMethod;
+use stdClass;
+
 enum StreamType: int {
     case Event = 0; // for JavaScript EventSource
     case Plain = 1; // for terminal application
@@ -18,6 +26,7 @@ class ChatGPT {
     protected ?Assistant $assistant = null;
     protected ?string $thread_id = null;
     protected ?Run $run = null;
+    protected $default_class = null;
 
     public function __construct(
         protected string $api_key,
@@ -33,6 +42,17 @@ class ChatGPT {
             $this->messages = ($this->loadfunction)( $this->chat_id );
             $this->loaded = true;
         }
+    }
+
+    /**
+     * This is a default class to use when we don't have full reflection info
+     *
+     * @param mixed $class
+     *
+     * @return void
+     */
+    public function default_class ($class ) {
+        $this->default_class = $class;
     }
 
     public function assistant_mode( bool $enabled ) {
@@ -391,7 +411,11 @@ class ChatGPT {
                 if( is_callable( $callable ) ) {
                     $result = $callable( ...array_values( $arguments ) );
                 } else {
-                    $result = "Function '$function_name' unavailable.";
+                    if (!class_exists($this->default_class)) {
+                        throw new Exception("Invalid default class specified");
+                    }
+                    $class = new $this->default_class();
+                    $result = $class::$callable( ...array_values( $arguments ) );
                 }
 
                 $tool_outputs[$tool_call["id"]] = $result;
@@ -413,7 +437,7 @@ class ChatGPT {
         return $message;
     }
 
-    protected function get_function( string $function_name ): callable|false {
+    protected function get_function( string $function_name ): callable|string|false {
         if( $this->assistant_mode ) {
             $functions = $this->assistant->get_functions();
         } else {
@@ -458,6 +482,7 @@ class ChatGPT {
             $tools[] = [
                 "type" => "function",
                 "function" => [
+                    'function' => $function['function'],
                     "name" => $function["name"],
                     "description" => $function["description"],
                     "parameters" => [

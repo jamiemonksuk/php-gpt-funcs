@@ -1,5 +1,7 @@
 <?php
-require("../library/ChatGPT.php");
+
+use Amble\PhpGptFuncs\library\ChatGPT;
+
 
 class MyGPTClass {
     protected $chatgpt;
