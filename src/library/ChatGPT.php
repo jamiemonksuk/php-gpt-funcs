@@ -761,6 +761,47 @@ class ChatGPT {
         );
     }
 
+    public function fetch_runs(
+        string $thread_id,
+        int $limit = 10,
+        string $order = 'desc'
+    ): array {
+        $response = $this->openai_api_post(
+            url: "https://api.openai.com/v1/threads/" . $thread_id . "/runs?limit={$limit}&order={$order}",
+            extra_headers: ["OpenAI-Beta: assistants=v1"],
+            post: false,
+        );
+
+        $out = [];
+
+        foreach ($response['data'] as $run) {
+            $out[] = new Run(
+                thread_id: $thread_id,
+                required_action: $run["required_action"] ?? null,
+                status: $run["status"],
+                id: $run["id"],
+            );
+        }
+
+        return $out;
+    }
+
+    public function stop_run(
+        Run $run
+    ): Run {
+        $response = $this->openai_api_post(
+            url: "https://api.openai.com/v1/threads/" . $run->get_thread_id() . "/runs/" . $run->get_id() . "/cancel",
+            extra_headers: ["OpenAI-Beta: assistants=v1"],
+        );
+
+        return new Run(
+            thread_id: $response["thread_id"],
+            required_action: $response["required_action"] ?? null,
+            status: $response["status"],
+            id: $response["id"],
+        );
+    }
+
     public function fetch_assistant( string $assistant_id ): Assistant {
         $response = $this->openai_api_post(
             url: "https://api.openai.com/v1/assistants/" . $assistant_id,
