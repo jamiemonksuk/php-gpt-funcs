@@ -22,11 +22,19 @@ class Run
         ] );
     }
 
+    public function requires_action() {
+        return $this->status == 'requires_action';
+    }
+
     public function get_status(): string {
         return $this->status;
     }
 
     public function get_required_action() {
         return $this->required_action;
+    }
+
+    public function get_thread_id(): string {
+        return $this->thread_id;
     }
 }
