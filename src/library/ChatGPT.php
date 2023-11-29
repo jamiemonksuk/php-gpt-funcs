@@ -1,6 +1,7 @@
 <?php
 namespace AmblePhpGptFuncs\library;
 
+use AmblePhpGptFuncs\exceptions\OpenAiApiException;
 use CurlHandle;
 use Exception;
 use ReflectionFunction;
@@ -272,6 +273,13 @@ class ChatGPT {
         ) );
 
         $curl_exec = curl_exec( $ch );
+        $info = curl_getinfo($ch);
+
+        if (curl_errno($ch)) {
+            $error = curl_error($ch);
+            curl_close($ch);
+            throw new Exception('cURL error: ' . $error);
+        }
 
         // get ChatGPT reponse
         if( $stream_type ) {
@@ -291,9 +299,10 @@ class ChatGPT {
                 if( isset( $response->error ) ) {
                     $error = trim( $response->error->message . " (" . $response->error->type . ")" );
                 } else {
-                    $error = $curl_exec;
+                    $error = curl_error($ch);
                 }
-                throw new \Exception( "Error in OpenAI request: " . $error );
+                if (empty($response)) $response = 'Unknown error';
+                throw new OpenAiApiException( "Error response from AI: {$response}", $info );
             }
 
             // add response to messages
@@ -646,6 +655,13 @@ class ChatGPT {
         }
 
         $response = curl_exec( $ch );
+        $info = curl_getinfo($ch);
+
+        if (curl_errno($ch)) {
+            $error = curl_error($ch);
+            curl_close($ch);
+            throw new OpenAiApiException('AI communication error: ' . $error, $info);
+        }
 
         curl_close( $ch );
 
@@ -653,10 +669,13 @@ class ChatGPT {
 
         if( ! isset( $data["id"] ) && ! isset( $data["data"] ) ) {
             if( isset( $data["error"] ) ) {
-                throw new \Exception( "Error in OpenAI request: " . $data["error"]["message"] );
+                throw new OpenAiApiException( "Error in AI request: " . $data["error"]["message"], $info);
             }
 
-            throw new \Exception( "Error in OpenAI request: " . $data );
+            $info = curl_getinfo($ch);
+
+            if (empty($response)) $response = 'Unknown error';
+            throw new OpenAiApiException( "Error encountered in AI request: " . $response, $info);
         }
 
         return $data;
