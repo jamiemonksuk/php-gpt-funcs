@@ -491,7 +491,6 @@ class ChatGPT {
             $tools[] = [
                 "type" => "function",
                 "function" => [
-                    'function' => $function['function'],
                     "name" => $function["name"],
                     "description" => $function["description"],
                     "parameters" => [
